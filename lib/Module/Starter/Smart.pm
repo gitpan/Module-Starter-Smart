@@ -1,6 +1,6 @@
 package Module::Starter::Smart;
 
-use version; $VERSION = qv('0.0.1');
+use version; $VERSION = qv('0.0.2');
 
 use warnings;
 use strict;
@@ -11,7 +11,7 @@ Module::Starter::Smart - Add new modules into an existing distribution with this
 
 =head1 VERSION
 
-version 0.0.1
+version 0.0.2
 
 =head1 SYNOPSIS
 
@@ -36,6 +36,94 @@ invoked with a existing distribution, the plugin may bypass the C<create_basedir
 subroutine, pull in a list of existing modules as well as test files, create new
 modules, and recreate the manifest file accordingly.  
 
+=head2 Adding a new module to an existing distribution
+
+Say you have an existing distro, Goof-Ball, and you want to add a new module, Goof::Troop.
+
+    % ls -R Goof-Ball
+    Build.PL  Changes   MANIFEST  README    lib/      t/
+    
+    Goof-Ball/lib:
+    Goof/
+    
+    Goof-Ball/lib/Goof:
+    Ball.pm
+    
+    Goof-Ball/t:
+    00.load.t       perlcritic.t    pod-coverage.t  pod.t
+
+Go to the directory containing your existing distribution and run module-starter, giving it the names of the existing distribution and the new module:
+
+    % module-starter --distro=Goof-Ball --module=Goof::Troop
+    Created starter directories and files
+    
+    % ls -R Goof-Ball
+    Build.PL  Changes   MANIFEST  README    lib/      t/
+    
+    Goof-Ball/lib:
+    Goof/
+    
+    Goof-Ball/lib/Goof:
+    Ball.pm   Troop.pm
+    
+    Goof-Ball/t:
+    00.load.t       perlcritic.t    pod-coverage.t  pod.t
+
+Troop.pm has been added to Goof-Ball/lib/Goof.
+
+=head2 Placing an existing module into a new distribution
+
+Let Foo::Baz be your existing module, and Globbo be the new distribution you will be creating.
+
+Put Foo/Baz.pm in a lib directory if it's not already.
+
+    % mkdir lib
+    % cp -R /some/other/location/Foo ./lib
+    % ls -R ./lib
+    Foo/
+    ./lib/Foo:
+    Baz.pm
+
+Make sure you're in the parent directory that contains the lib directory. Then make your new distro, but give module-starter the name of your existing module, too:
+
+    % module-starter --distro=Globbo --module=Foo::Baz
+    Created starter directories and files
+    
+    % ls -R Globbo
+    Build.PL  Changes   MANIFEST  README    lib/      t/
+    
+    Globbo/lib:
+    Foo/
+    
+    Globbo/lib/Foo:
+    Baz.pm
+    
+    Globbo/t:
+    00.load.t       perlcritic.t    pod-coverage.t  pod.t
+
+Foo/Baz.pm has been added to Globbo's lib directory.
+
+=head2 Adding an existing module to an existing distribution
+
+Say you have an existing distro, Foo::Bar, and you want to add to it an existing module, Foo::Baz:
+
+    % module-starter --module Foo::Baz --distro=Foo-Bar
+    Created starter directories and files
+    
+    % ls -R Foo-Bar
+    Build.PL  Changes   MANIFEST  README    lib/      t/
+    
+    Foo-Bar/lib:
+    Foo/
+    
+    Foo-Bar/lib/Foo:
+    Bar.pm  Baz.pm
+    
+    Foo-Bar/t:
+    00.load.t       perlcritic.t    pod-coverage.t  pod.t
+
+Foo/Baz.pm has been placed in lib/Foo.
+
 =cut
 
 use ExtUtils::Command qw/mkpath/;
@@ -46,11 +134,7 @@ use subs qw/_sort _pull_modules _list_modules _pull_t _list_t/;
 
 =head1 INTERFACE
 
-Module::Starter::Smart subclasses Module::Starter::Simple.
-
-=head2 create_distro
-
-Pull in existing modules, put them in the C<$config>, and call C<< $class->SUPER::create_distro >>.
+No public methods.  The module works by subclassing Module::Starter::Simple and rewiring its internal behaviors.
 
 =cut
 
@@ -71,23 +155,11 @@ sub create_distro {
     $class->SUPER::create_distro(%config);
 }
 
-=head2 create_basedir
-
-Bypass creation when the specified distribution exists.
-
-=cut
-
 sub create_basedir {
     my $self = shift;
     return $self->SUPER::create_basedir(@_) unless -e $self->{basedir} && !$self->{force};
     $self->progress( "Found $self->{basedir}.  Use --force if you want to stomp on it." );
 }
-
-=head2 create_modules
-
-Create new modules only.
-
-=cut
 
 sub create_modules {
     my $self = shift;
@@ -129,12 +201,6 @@ sub _create_module {
     return $manifest_file;
 }
 
-=head2 create_t
-
-Create new test files only.
-
-=cut
-
 sub create_t {
     my $self = shift;
     _sort $self->SUPER::create_t(@_), _pull_t $self->{basedir};
@@ -167,12 +233,6 @@ sub _create_t {
     return "t/$filename";
 }
 
-=head2 create_Makefile_PL
-
-Bypass creation when there's already one in the distribution. 
-
-=cut
-
 sub create_Makefile_PL {
     my $self = shift;
     my $main_module = shift;
@@ -195,12 +255,6 @@ sub create_Makefile_PL {
 
     return "Makefile.PL";
 }
-
-=head2 create_Build_PL
-
-Bypass creation when there's already one in the distribution. 
-
-=cut
 
 sub create_Build_PL {
     my $self = shift;
@@ -225,12 +279,6 @@ sub create_Build_PL {
     return "Build.PL";
 }
 
-=head2 create_Changes
-
-Bypass creation when there's already one in the distribution. 
-
-=cut
-
 sub create_Changes {
     my $self = shift;
 
@@ -247,12 +295,6 @@ sub create_Changes {
 
     return "Changes";
 }
-
-=head2 create_README
-
-Bypass creation when there's already one in the distribution. 
-
-=cut
 
 sub create_README {
     my $self = shift;
@@ -337,7 +379,7 @@ Module::Starter::Smart when importing Module::Starter.
 =head1 INCOMPATIBILITIES
 
 The plugin works perfectly with other template plugins, i.e. Module::Starter::PBP
-(I started this module with its built-in templates.  Hail Demian Conway!)
+(I started this module with its built-in templates.  Hail Damian Conway!)
 
 =head1 BUGS AND LIMITATIONS
 
@@ -347,10 +389,13 @@ Please report any bugs or feature requests to
 C<bug-module-starter-smart@rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org>.
 
+=head1 ACKNOWLEDGEMENT
+
+Special thanks to David Messina, who wrote the entire section of use-cases.
+
 =head1 AUTHOR
 
 Ruey-Cheng Chen  C<< <rueycheng@gmail.com> >>
-
 
 =head1 LICENCE AND COPYRIGHT
 
@@ -358,7 +403,6 @@ Copyright (c) 2006, Ruey-Cheng Chen C<< <rueycheng@gmail.com> >>. All rights res
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
-
 
 =head1 DISCLAIMER OF WARRANTY
 
