@@ -12,7 +12,6 @@ WriteMakefile(
         'Test::More' => 0,
 	'ExtUtils::Command' => 0,
 	'File::Spec' => 0,
-        'version'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Module-Starter-Smart-*' },
