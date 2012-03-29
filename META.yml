@@ -20,5 +20,7 @@ no_index:
 requires:
   ExtUtils::Command: 0
   File::Spec: 0
+  Module::Starter: 1.58
   Test::More: 0
-version: v0.0.3
+  parent: 0
+version: v0.0.4

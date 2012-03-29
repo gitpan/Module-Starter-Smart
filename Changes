@@ -1,5 +1,8 @@
 Revision history for Module-Starter-Smart
 
+0.0.4  Mar 29, 2012
+    * Fix broken dependency
+
 0.0.3  Mar 28, 2012
     * Fix RT 72565: Revise use cases
     * Rewrite create_distro() according to the latest version of Module::Starter::Simple (1.58)

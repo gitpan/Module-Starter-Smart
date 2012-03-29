@@ -34,10 +34,12 @@
          "requires" : {
             "ExtUtils::Command" : 0,
             "File::Spec" : 0,
-            "Test::More" : 0
+            "Module::Starter" : "1.58",
+            "Test::More" : 0,
+            "parent" : 0
          }
       }
    },
    "release_status" : "stable",
-   "version" : "v0.0.3"
+   "version" : "v0.0.4"
 }

@@ -1,11 +1,7 @@
 package Module::Starter::Smart;
 
-$VERSION = '0.0.3';
-
 use warnings;
 use strict;
-
-use parent qw(Module::Starter::Simple);
 
 =head1 NAME
 
@@ -14,7 +10,11 @@ an existing distribution
 
 =head1 VERSION
 
-version 0.0.3
+version 0.0.4
+
+=cut
+
+our $VERSION = '0.0.4';
 
 =head1 SYNOPSIS
 
@@ -86,6 +86,8 @@ module:
 Troop.pm has been added to Goof-Ball/lib/Goof.
 
 =cut
+
+use parent qw(Module::Starter::Simple);
 
 use ExtUtils::Command qw/mkpath/;
 use File::Spec;
