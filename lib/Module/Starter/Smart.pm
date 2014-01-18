@@ -10,11 +10,11 @@ an existing distribution
 
 =head1 VERSION
 
-version 0.0.4
+version 0.0.5
 
 =cut
 
-our $VERSION = '0.0.4';
+our $VERSION = '0.0.5';
 
 =head1 SYNOPSIS
 
@@ -33,7 +33,7 @@ our $VERSION = '0.0.4';
 =head1 DESCRIPTION
 
 Module::Starter::Smart is a simple helper plugin for L<Module::Starter>.  It
-subclasses L<Module::Starter::Simple> and provides its own implementatoin for
+subclasses L<Module::Starter::Simple> and provides its own implementation for
 several file creation subroutines, such as C<create_distro>, C<create_modules>,
 C<create_t>, and so on.  These new implementations were designed to work 
 with existing distributions.  

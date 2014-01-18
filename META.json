@@ -1,10 +1,10 @@
 {
-   "abstract" : "A Module::Starter plugin for adding new modules into",
+   "abstract" : "A Module::Starter plugin for adding new modules into an existing distribution",
    "author" : [
       "Ruey-Cheng Chen <rueycheng@gmail.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112621",
+   "generated_by" : "ExtUtils::MakeMaker version 6.86, CPAN::Meta::Converter version 2.120351",
    "license" : [
       "unknown"
    ],
@@ -22,24 +22,31 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "runtime" : {
          "requires" : {
-            "ExtUtils::Command" : 0,
-            "File::Spec" : 0,
+            "ExtUtils::Command" : "0",
+            "File::Spec" : "0",
             "Module::Starter" : "1.58",
-            "Test::More" : 0,
-            "parent" : 0
+            "Test::More" : "0",
+            "parent" : "0"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "v0.0.4"
+   "resources" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/rueycheng/Module-Starter-Smart.git",
+         "web" : "https://github.com/rueycheng/Module-Starter-Smart"
+      }
+   },
+   "version" : "v0.0.5"
 }
